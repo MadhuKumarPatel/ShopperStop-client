@@ -3,7 +3,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchDataFromApi } from '../../utils/api';
 
 export const fetchCategory = createAsyncThunk("fetchCategory", async ()=>{
-    const data = await fetchDataFromApi("/api/categories?populate=*")
+    const data = await fetchDataFromApi('/api/categories?populate=*')
+    // console.log(data);
     return data
 })
 
@@ -30,6 +31,9 @@ export const categorySlice = createSlice({
 
 export default categorySlice.reducer;
 
-export const selectCategories = (state) => state.category.data;
+export const selectCategories = (state) => {
+    console.log(state.category.data)
+     return state.category.data;
+}
 export const selectCategoryLoading = (state) => state.category.isLoading;
 export const selectCategoryError = (state) => state.category.error;

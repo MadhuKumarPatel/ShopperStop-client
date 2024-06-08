@@ -20,7 +20,7 @@ const CartItem = () => {
         return (
           <div className="cart-product" key={item.id}>
             <div className="img-container">
-              <img src={process.env.REACT_APP_DEV_URL + item.attributes.image.data[0].attributes.url} alt="" />
+              <img src={item.attributes.image.data[0].attributes.url} alt="" />
             </div>
             <div className="prod-details">
               <span className="name">{item.attributes.title}</span>

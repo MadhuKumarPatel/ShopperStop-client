@@ -10,7 +10,6 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Category = () => {
-
   
   const navigate = useNavigate()
 
@@ -25,7 +24,7 @@ const Category = () => {
 
   // console.log(categories);
 
-
+  
   return (
     <div className="shop-by-category">
       <span>Categories</span>
@@ -33,7 +32,10 @@ const Category = () => {
         {categories?.data?.map((item) => {
           return (
             <div key={item.id} className="category" onClick={()=> navigate(`/category/${item.id}`)}>
-              <img src={process.env.REACT_APP_DEV_URL + item.attributes.image.data.attributes.url} alt="" />
+              <h1>
+
+              </h1>
+              <img src={item.attributes.image.data.attributes.url} alt="" />
             </div>
           );
         })}
