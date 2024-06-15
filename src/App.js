@@ -6,10 +6,10 @@ import SingleProduct from "./components/SingleProduct/SingleProduct"
 import Header from "./components/Header/Header"
 import Footer from "./components/Footer/Footer";
 import Newsletter from "./components/Footer/Newsletter/Newsletter"
-import LoginPage from "./components/Login/Login";
 import { selectUsers } from "./redux/slicers/userSlice";
 import { useSelector } from "react-redux";
 import Success from "./components/Success/Success";
+import LoginPage from "./components/Login/Login";
 
 const Layout = ({ children }) => (
     <>

@@ -1,4 +1,4 @@
-import "../Login/Login.css";
+import "../Login/Login.scss";
 
 function Loader({bg}) {
     return (

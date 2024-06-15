@@ -1,11 +1,12 @@
 import FullPageLoader from "../FullPageLoader/FullPageLoader";
-import { useState } from "react";
-import { auth } from "../../Config";
-import "./Login.css";
+import { useEffect, useState } from "react";
+import { auth } from "../../firebase/Config";
+import "./Login.scss";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendPasswordResetEmail,
+  signInAnonymously,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
@@ -16,57 +17,90 @@ function LoginPage() {
   const [loginType, setLoginType] = useState("login");
   const [userCredentials, setUserCredentials] = useState({});
   const [error, setError] = useState("");
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      dispatch(setUser({id: user.uid , email: user.email}))
-    } else {
-      dispatch(setUser(null))
-    }
-    if(isLoading){
-    setIsLoading(false)
-    }
-  });
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     dispatch(setUser({ id: user.uid, email: user.email }));
+  //   } else {
+  //     dispatch(setUser(null));
+  //   }
+  //   if (isLoading) {
+  //     setIsLoading(false);
+  //   }
+  // });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(setUser({ id: user.uid, email: user.email }));
+      } else {
+        dispatch(setUser(null));
+      }
+      if (isLoading) {
+        setIsLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [isLoading, dispatch]);
 
   const handleCredentials = (e) => {
     setError("");
     setUserCredentials({ ...userCredentials, [e.target.name]: e.target.value });
   };
 
-  const handelSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(
-      auth,
-      userCredentials.email,
-      userCredentials.password
-    )
-      .catch((error) => {
-        setError(error.message);
-      });
+    if (!userCredentials.email || !userCredentials.password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      await createUserWithEmailAndPassword(auth, userCredentials.email, userCredentials.password);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(
-      auth,
-      userCredentials.email,
-      userCredentials.password
-    )
-      .catch((error) => {
-        setError(error.message);
-      });
+    if (!userCredentials.email || !userCredentials.password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, userCredentials.email, userCredentials.password);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
-   const handlePasswordReset = () => {
-      const email = prompt("Please enter your email.")
-      sendPasswordResetEmail(auth , email)
-      alert('Email sent! Check your inbox')
-   }
+  const handlePasswordReset = async () => {
+    const email = prompt("Please enter your email.");
+    if (email) {
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert("Email sent! Check your inbox.");
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    try {
+      await signInAnonymously(auth);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return (
     <>
-      { isLoading && <FullPageLoader></FullPageLoader> }
+      {isLoading && <FullPageLoader></FullPageLoader>}
 
       <div className="container login-page">
         <section>
@@ -74,17 +108,25 @@ function LoginPage() {
           <p>Login or create an account to continue</p>
           <div className="login-type">
             <button
-              className={`btn ${loginType == "login" ? "selected" : ""}`}
+              className={`btn ${loginType === "login" ? "selected" : ""}`}
               onClick={() => setLoginType("login")}
             >
               Login
             </button>
             <button
-              className={`btn ${loginType == "signup" ? "selected" : ""}`}
+              className={`btn ${loginType === "signup" ? "selected" : ""}`}
               onClick={() => setLoginType("signup")}
             >
               Signup
             </button>
+            <div className="guestbtn">
+            <button
+              className="btn guest"
+              onClick={handleGuestLogin}
+            >
+              Continue as Guest
+            </button>
+            </div>
           </div>
           <form className="add-form login">
             <div className="form-control">
@@ -114,7 +156,7 @@ function LoginPage() {
               </button>
             ) : (
               <button
-                onClick={(e) => handelSignUp(e)}
+                onClick={(e) => handleSignUp(e)}
                 className="active btn btn-block"
               >
                 Sign Up
@@ -122,7 +164,9 @@ function LoginPage() {
             )}
             {error && <div className="error">{error}</div>}
 
-            <p onClick={handlePasswordReset} className="forgot-password">Forgot Password?</p>
+            <p onClick={handlePasswordReset} className="forgot-password">
+              Forgot Password?
+            </p>
           </form>
         </section>
       </div>

@@ -8,7 +8,7 @@ import "./Header.scss";
 import Modal from "../Modal/Modal";
 import { useSelector } from "react-redux";
 import {signOut } from "firebase/auth";
-import { auth } from "../../Config";
+import { auth } from "../../firebase/Config";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slicers/userSlice";
 import { Link } from "react-router-dom";
@@ -40,15 +40,6 @@ const Header = () => {
        }
   };
 
-  // const handleSignOut = () => {
-  //   if(window.confirm("Do you really want to logout?")){
-  //       signOut(auth).then(() => {
-  //           dispatch(setUser(null))
-  //         }).catch((error) => {
-  //           console.log(error)
-  //         });
-  //   }
-  // }
 
   const handleSignOut = () => {
     signOut(auth)
