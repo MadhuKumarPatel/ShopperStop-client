@@ -29,7 +29,7 @@ const Category = () => {
     return <div className="shop-by-category">
     <span>Categories</span>
     <div className="categories">
-       <p>Fetching Categories ...</p>
+       <p style={{fontSize:24}}>Fetching Categories ...</p>
     </div>
   </div>
   }

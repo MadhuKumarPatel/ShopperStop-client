@@ -11,7 +11,7 @@ const Products = ({ innerpage,headingText,products,isLoading }) => {
     return  <div className="products-container">
     {!innerpage &&<div className="sec-heading">{headingText}</div>}
         <div className="products">
-         <p>Fetching Products ...</p>
+         <p style={{fontSize:24}}>Fetching Products ...</p>
         </div>
     </div>
    }
