@@ -3,9 +3,16 @@ import Product from "./Product/Product"
 
 import React  from 'react';
 
-const Products = ({ innerpage,headingText,products }) => {
+const Products = ({ innerpage,headingText,products,isLoading }) => {
 
     //   console.log(products);
+
+   if(isLoading){
+    return <div className="products-container">
+        <p>Products Loading ...</p>
+    </div>
+   }
+
 
     return (
         <div className="products-container">

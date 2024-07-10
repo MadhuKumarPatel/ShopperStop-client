@@ -15,6 +15,7 @@ const Category = () => {
 
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories);
+  const isLoading = useSelector(selectCategoryLoading)
   // const isLoading = useSelector(selectCategoryLoading);
   // const error = useSelector(selectCategoryError);
 
@@ -23,6 +24,12 @@ const Category = () => {
   }, [dispatch]);
 
   // console.log(categories);
+
+  if(isLoading){
+    return <div className="shop-by-category">
+       <p> Fetching Categories .....</p>
+    </div>
+  }
 
   
   return (
@@ -35,7 +42,7 @@ const Category = () => {
               <h1>
 
               </h1>
-              <img src={item.attributes.image.data.attributes.url} alt="" />
+              <img src={item?.attributes?.image?.data?.attributes?.url} alt="" />
             </div>
           );
         })}

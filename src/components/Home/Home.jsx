@@ -26,7 +26,7 @@ const Home = () => {
       <div className="main-content">
         <div className="layout">
           <Category />
-          <Products products={products} headingText="Popular Products"/>
+          <Products products={products} isLoading={isLoading} headingText="Popular Products"/>
         </div>
       </div>
     </div>
