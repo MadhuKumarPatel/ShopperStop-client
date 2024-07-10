@@ -27,8 +27,11 @@ const Category = () => {
 
   if(isLoading){
     return <div className="shop-by-category">
-       <p> Fetching Categories .....</p>
+    <span>Categories</span>
+    <div className="categories">
+       <p>Fetching Categories ...</p>
     </div>
+  </div>
   }
 
   
